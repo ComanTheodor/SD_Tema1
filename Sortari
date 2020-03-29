@@ -1,0 +1,193 @@
+import time
+
+def verificare(v1, v2):
+    v1.sort()
+    if v1 == v2:
+        print("Sortarea este corecta")
+    else:
+        print("Sortarea nu este corecta")
+
+
+
+#BUBBLESORT
+def bubblesort(v):
+    n = len(v)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if v[j] > v[j + 1]:
+                v[j], v[j + 1] = v[j + 1], v[j]
+
+    return v
+
+#MERGESORT
+def mergeSort(myList):
+    if len(myList) > 1:
+        mid = len(myList) // 2
+        left = myList[:mid]
+        right = myList[mid:]
+
+        # Recursive call on each half
+        mergeSort(left)
+        mergeSort(right)
+
+        # Two iterators for traversing the two halves
+        i = 0
+        j = 0
+
+        # Iterator for the main list
+        k = 0
+
+        while i < len(left) and j < len(right):
+            if left[i] < right[j]:
+                # The value from the left half has been used
+                myList[k] = left[i]
+                # Move the iterator forward
+                i += 1
+            else:
+                myList[k] = right[j]
+                j += 1
+            # Move to the next slot
+            k += 1
+
+        # For all the remaining values
+        while i < len(left):
+            myList[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+            myList[k] = right[j]
+            j += 1
+            k += 1
+
+#QUICKSORT
+def partition(v, left, right):
+    pivot = v[(left + right) // 2]
+    i = left - 1
+    j = right + 1
+    while True:
+        i += 1
+        while v[i] < pivot:
+            i += 1
+
+        j -= 1
+        while v[j] > pivot:
+            j -= 1
+
+        if i >= j:
+            return j
+
+        v[i], v[j] = v[j], v[i]
+
+
+def quick_sort(v):
+    def _quick_sort(items, left, right):
+        if left < right:
+            split_index = partition(items, left, right)
+            _quick_sort(items, left, split_index)
+            _quick_sort(items, split_index + 1, right)
+
+    _quick_sort(v, 0, len(v) - 1)
+
+#RADIXSORT
+def countingSort(array, place):
+    size = len(array)
+    output = [0] * size
+    count = [0] * 10
+
+    for i in range(0, size):
+        index = array[i] // place
+        count[index % 10] += 1
+
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    i = size - 1
+    while i >= 0:
+        index = array[i] // place
+        output[count[index % 10] - 1] = array[i]
+        count[index % 10] -= 1
+        i -= 1
+
+    for i in range(0, size):
+        array[i] = output[i]
+
+
+def radixSort(array):
+    max_element = max(array)
+    place = 1
+    while max_element // place > 0:
+        countingSort(array, place)
+        place *= 10
+
+#COUNTSORT
+def counting_sort(v, maxval):
+    n = len(v)
+    m = maxval + 1
+    count = [0] * m
+    for a in v:
+        count[a] += 1
+    i = 0
+    for a in range(m):
+        for c in range(count[a]):
+            v[i] = a
+            i += 1
+    return v
+
+def test():
+    if (len(v) > 3000):
+        print("Vectorul contine prea multe elemente pt Bubblesort ")
+    else:
+        start = time.time()
+        v1 = v.copy()
+        bubblesort(v1)
+        elapsed = (time.time() - start)
+        print(v1)
+        print("Bubblesort a durat:  ", elapsed)
+
+    start = time.time()
+    v2 = v.copy()
+    mergeSort(v2)
+    elapsed = (time.time() - start)
+    print(v2)
+    print("Mergesort a durat:  ", elapsed)
+
+    start = time.time()
+    v3 = v.copy()
+    quick_sort(v3)
+    elapsed = (time.time() - start)
+    print(v3)
+    print("Quicksort a durat:  ", elapsed)
+
+    start = time.time()
+    v4 = v.copy()
+    radixSort(v4)
+    elapsed = (time.time() - start)
+    print(v4)
+    print("Radixsort a durat:  ", elapsed)
+
+
+    if n > 256:
+        print("Valorile din vector sunt prea mari pentru countsort")
+    else:
+        start = time.time()
+        v5 = v.copy()
+        counting_sort(v5, n)
+        elapsed = (time.time() - start)
+        print(v5)
+        print("countsort a durat:  ", elapsed)
+
+
+from random import randint
+
+
+
+print("Numarul de elemente din vector: ")
+nrElem = int (input())
+
+print("Valoarea maxima din vector: ")
+n = int (input())
+
+v = [ randint(1, n) for x in range(nrElem) ]
+
+test()
